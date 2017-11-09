@@ -1,6 +1,4 @@
 import heapq
-import copy
-import string
 
 final_config = [1, 2, 3, 4, 12, 13, 14, 5, 11, 0, 15, 6, 10, 9, 8, 7]
 open_list = []
