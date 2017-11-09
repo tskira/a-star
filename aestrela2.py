@@ -309,5 +309,4 @@ def AStar(initial_config):
     print(current_state[1])
 
 read_config = list(map(int, input().split()))
-'''print(HeuristicOne(read_config))'''
 AStar(read_config)
