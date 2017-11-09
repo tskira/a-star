@@ -302,7 +302,7 @@ def GetChildren(current_config, g_function):
 def AStar(initial_config):
     heapq.heappush(open_list,(HeuristicTree(initial_config), 0, initial_config) )
     current_state = heapq.heappop(open_list)
-    while(HeuristicTree(current_state[2])):
+    while(current_state[0] - current_state[1]):
         closed_list.update([str(current_state[2])])
         GetChildren(current_state[2], current_state[1])
         current_state = heapq.heappop(open_list)
