@@ -32,7 +32,7 @@ def GetChildren(current_config, open_list, g_function):
     zero_position = current_config.index(0)
     for i in swap_position[zero_position]:
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
-        new_current = copy.copy(current_config)
+        new_current = current_config[:]
         h_function = HeuristicOne(current_config)
         heapq.heappush(open_list, (h_function + g_function + 1, g_function + 1, new_current))
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
