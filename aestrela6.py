@@ -1,6 +1,9 @@
 import heapq
 
 final_config = (1, 2, 3, 4, 12, 13, 14, 5, 11, 0, 15, 6, 10, 9, 8, 7)
+
+sequence = (0, 1, 2, 3, 7, 11, 15, 14, 13, 12, 8, 4, 5, 6, 10, 9)
+
 open_list = []
 closed_list = set()
 
@@ -280,6 +283,22 @@ swap_position = [[1,4],
                  [10,15,13],
                  [11,14]]
 
+def HeuristicOne(read_config):
+    wrong_pieces = 0
+    for i in range(0,16):
+        if read_config[i] != 0:
+            if (read_config[i] != final_config[i]):
+                wrong_pieces += 1
+    return wrong_pieces
+
+def HeuristicTwo(read_config):
+    wrong_pieces = 0
+    for i in range (1,16):
+        if read_config[sequence[i - 1]] != 0:
+            if (read_config[sequence[i]] != (read_config[sequence[i - 1]] + 1)):
+                wrong_pieces += 1
+    return wrong_pieces
+
 def HeuristicTree(read_config):
     resp = 0
     for i in range(0,16):
@@ -293,11 +312,18 @@ def GetChildren(config, g_function):
     current_config = list(config)
     
     for i in swap_position[zero_position]:
-            current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
-            aux_current = tuple(current_config[:])
-            if (aux_current) not in closed_list:
+        alocado = 0
+        current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
+        aux_current = tuple(current_config[:])
+        for index in open_list:
+            if ((index[2] == aux_current) and (HeuristicTree(aux_current) + inc_g) > index[0]):
+                open_list.remove(index)
                 heapq.heappush(open_list, (HeuristicTree(aux_current) + inc_g, inc_g, aux_current))
-            current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
+                alocado = 1    
+        if (aux_current) not in closed_list and not alocado:  
+            heapq.heappush(open_list, (HeuristicTree(aux_current) + inc_g, inc_g, aux_current))
+        current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
+        alocado = 0
 
 def AStar(initial_config):
     current_state = (HeuristicTree(initial_config), 0, initial_config)
