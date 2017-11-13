@@ -1,5 +1,5 @@
 import heapq
-    
+
 final_config = (1, 2, 3, 4, 12, 13, 14, 5, 11, 0, 15, 6, 10, 9, 8, 7)
 open_list = []
 closed_list = set()
@@ -291,6 +291,7 @@ def GetChildren(config, g_function):
     zero_position = config.index(0)
     inc_g = g_function + 1
     current_config = list(config)
+    
     for i in swap_position[zero_position]:
             current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
             aux_current = tuple(current_config[:])

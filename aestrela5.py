@@ -1,5 +1,6 @@
 import heapq
-    
+from multiprocessing import Pool
+
 final_config = (1, 2, 3, 4, 12, 13, 14, 5, 11, 0, 15, 6, 10, 9, 8, 7)
 open_list = []
 closed_list = set()
@@ -290,21 +291,46 @@ def HeuristicTree(read_config):
 def GetChildren(config, g_function):
     zero_position = config.index(0)
     inc_g = g_function + 1
-    current_config = list(config)
+    if (len(swap_position[zero_position]) == 2):
+        with Pool(2) as p:
+            p.starmap(calculeh, [(zero_position, swap_position[zero_position][0], config, inc_g),(zero_position, swap_position[zero_position][1], config, inc_g)])
+    else:
+        if (len(swap_position[zero_position]) == 3):
+            with Pool(3) as p:
+                p.starmap(calculeh, [(zero_position, swap_position[zero_position][0], config, inc_g), (zero_position, swap_position[zero_position][1], config, inc_g), (zero_position, swap_position[zero_position][2], config, inc_g)])
+        else:
+            with Pool(4) as p:  
+                p.starmap(calculeh, [(zero_position, swap_position[zero_position][0], config, inc_g), (zero_position, swap_position[zero_position][1], config, inc_g), (zero_position, swap_position[zero_position][2], config, inc_g), (zero_position, swap_position[zero_position][3], config, inc_g)])
+'''         
     for i in swap_position[zero_position]:
             current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
             aux_current = tuple(current_config[:])
             if (aux_current) not in closed_list:
                 heapq.heappush(open_list, (HeuristicTree(aux_current) + inc_g, inc_g, aux_current))
             current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
+  '''  
+
+def calculeh(zero, i, configuration, g):
+    conf = list(configuration)
+    conf[zero], conf[i] = conf[i], conf[zero]
+    aux = tuple(conf[:])
+    if aux not in closed_list:
+        heapq.heappush(open_list, (HeuristicTree(aux) + g, g, aux))
+    print(conf)
+    print(open_list)
+    conf[zero], conf[i] = conf[i], conf[zero]
 
 def AStar(initial_config):
     current_state = (HeuristicTree(initial_config), 0, initial_config)
     while(current_state[0] - current_state[1]):
         closed_list.add(current_state[2])
         GetChildren(current_state[2], current_state[1])
-        current_state = heapq.heappop(open_list)
+        if(open_list):
+            current_state = heapq.heappop(open_list)
+            print(current_state[1])
+            print(closed_list)
     print(current_state[1])
 
 read_config = tuple(map(int, input().split()))
 AStar(read_config)
+
