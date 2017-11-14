@@ -329,23 +329,20 @@ def AStar(initial_config):
             if (aux not in open_set):
                 heapq.heappush(open_list,(hx + inc_g, inc_g, aux))
                 open_set.add(aux)
+            else:
+                index = -1
+                achou = False
+                while(not achou):
+                    index += 1
+                    achou = aux == open_list[index][2]
+                if(achou) :
+                    if ((hx + inc_g) > open_list[index][0]):
+                        open_list[index] = open_list[-1]
+                        open_list.pop() 
+                        heapq.heapify(open_list)
+                        heapq.heappush(open_list, (hx + inc_g, inc_g, aux))
             current_config[i], current_config[zero_position] = current_config[zero_position], current_config[i]
-
-            '''
-            index = -1
-            achou = False
-            for index in range(len(open_list)):
-                achou = aux == open_list[index][2]
-            if (not achou):
-                heapq.heappush(open_list, (hx + inc_g, inc_g, aux))
-            if(achou) :
-                if ((hx + inc_g) > open_list[index][0]):
-                    open_list[index] = open_list[-1]
-                    open_list.pop() 
-                    heapq.heapify(open_list)
-                    heapq.heappush(open_list, (hx + inc_g, inc_g, aux))
-            current_config[i], current_config[zero_position] = current_config[zero_position], current_config[i]
-            '''
+                
     print('sem resposta')
     return(-1)
     
