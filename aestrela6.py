@@ -311,8 +311,13 @@ def AStar(initial_config):
     heapq.heappush(open_list, (HeuristicTree(initial_config), 0, initial_config))
     open_set.add(initial_config)
     while(open_list):
+    #for k in range(16):
         current = heapq.heappop(open_list)
-        print('{} : {}' .format(current[1], current[2]))
+        print(current[1])
+        print('{} {} {} {}'.format(current[2][0],current[2][1],current[2][2],current[2][3]))
+        print('{} {} {} {}'.format(current[2][4],current[2][5],current[2][6],current[2][7]))
+        print('{} {} {} {}'.format(current[2][8],current[2][9],current[2][10],current[2][11]))
+        print('{} {} {} {}'.format(current[2][12],current[2][13],current[2][14],current[2][15]))
         open_set.remove(current[2])
         if (current[2] == final_config):
             return(current[1])
@@ -324,8 +329,8 @@ def AStar(initial_config):
             current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
             hx = HeuristicTree(current_config)
             aux = tuple(current_config[:])
-            if (aux in closed_list):
-                continue
+            #if (aux in closed_list):
+            #    continue
             if (aux not in open_set):
                 heapq.heappush(open_list,(hx + inc_g, inc_g, aux))
                 open_set.add(aux)
@@ -337,8 +342,7 @@ def AStar(initial_config):
                     achou = aux == open_list[index][2]
                 if(achou) :
                     if ((hx + inc_g) > open_list[index][0]):
-                        open_list[index] = open_list[-1]
-                        open_list.pop() 
+                        open_list.remove(open_list[index])
                         heapq.heapify(open_list)
                         heapq.heappush(open_list, (hx + inc_g, inc_g, aux))
             current_config[i], current_config[zero_position] = current_config[zero_position], current_config[i]
