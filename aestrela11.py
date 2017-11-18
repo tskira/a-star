@@ -13,7 +13,7 @@ memo_heuristic = [[0 for x in range(16)] for y in range(16)]
 memo_heuristic[0][0] = 0
 memo_heuristic[0][1] = 0
 memo_heuristic[0][2] = 0
-memo_heuristic[0][3] = 0
+memo_heuristic[0][3] = 0        
 memo_heuristic[0][4] = 0
 memo_heuristic[0][5] = 0
 memo_heuristic[0][6] = 0
@@ -293,37 +293,30 @@ def HeuristicTree(read_config):
     for i in range(16):
         if (read_config[i] != 0):
             resp += memo_heuristic[read_config[i]][i]
-    print('horizontal')
     for i in range(16):
         if read_config[i] not in row_list:
             for j in range(4):
                 if (read_config[(i // 4) * 4 + j] != read_config[i] and read_config[i] != 0):
                     if((line[read_config[i]] == line[read_config[(i // 4) * 4 + j]] == i //4) and i % 4 < j and final_position[read_config[i]] % 4 > final_position[read_config[(i // 4) * 4 + j]] % 4 and read_config[(i // 4) * 4 + j] != 0):
-                        print()
-                        print('{} {} {} {}'. format(read_config[0], read_config[1], read_config[2], read_config[3]))
-                        print('{} {} {} {}'. format(read_config[4], read_config[5], read_config[6], read_config[7]))
-                        print('{} {} {} {}'. format(read_config[8], read_config[9], read_config[10], read_config[11]))
-                        print('{} {} {} {}'. format(read_config[12], read_config[13], read_config[14], read_config[15]))
-                        print('{} x {}' .format(read_config[i], read_config[(i //4) * 4 + j]))
                         resp += 2
                         row_list.add(read_config[i])
                         row_list.add(read_config[(i // 4)*4 + j])
-    print('vertical')
+                    if((line[read_config[i]] == line[read_config[(i // 4) * 4 + j]] == i //4) and i % 4 > j and final_position[read_config[i]] % 4 < final_position[read_config[(i // 4) * 4 + j]] % 4 and read_config[(i // 4) * 4 + j] != 0):
+                        resp += 2
+                        row_list.add(read_config[i])
+                        row_list.add(read_config[(i // 4)*4 + j])
     for i in range(16):
         if read_config[i] not in column_list:
             for j in range(4):
                 if (read_config[i % 4 + j * 4] != read_config[i] and read_config[i] != 0):
-                    if((line[read_config[i]] == line[read_config[(i % 4) + 4 * j]] == i % 4) and i // 4 < j and final_position[read_config[i]] // 4 > final_position[read_config[(i % 4) + 4 * j]] % 4 and read_config[i % 4 + 4 * j] != 0):
-                        print()
-                        print('{} {} {} {}'. format(read_config[0], read_config[1], read_config[2], read_config[3]))
-                        print('{} {} {} {}'. format(read_config[4], read_config[5], read_config[6], read_config[7]))
-                        print('{} {} {} {}'. format(read_config[8], read_config[9], read_config[10], read_config[11]))
-                        print('{} {} {} {}'. format(read_config[12], read_config[13], read_config[14], read_config[15]))
-                        print('{} x {}' .format(read_config[i], read_config[i % 4 + 4 * j]))
+                    if((row[read_config[i]] == row[read_config[(i % 4) + 4 * j]] == i % 4) and i // 4 < j and final_position[read_config[i]] // 4 > final_position[read_config[(i % 4) + 4 * j]] // 4 and read_config[i % 4 + 4 * j] != 0):
                         resp += 2
                         column_list.add(read_config[i])
                         column_list.add(read_config[i%4 + 4 * j])
-
+                    if((row[read_config[i]] == row[read_config[(i % 4) + 4 * j]] == i % 4) and i // 4 > j and final_position[read_config[i]] // 4 < final_position[read_config[(i % 4) + 4 * j]] // 4 and read_config[i % 4 + 4 * j] != 0):
+                        resp += 2
+                        column_list.add(read_config[i])
+                        column_list.add(read_config[i%4 + 4 * j])
             
     return resp
     
