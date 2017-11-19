@@ -1,12 +1,6 @@
 import heapq
     
 final_config = (1, 2, 3, 4, 12, 13, 14, 5, 11, 0, 15, 6, 10, 9, 8, 7)
-final_position = (9, 0, 1, 2, 3, 7, 11, 15, 14, 13, 12, 8, 4, 5, 6, 10)
-line = (3, 0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 2, 1, 1, 1, 2)
-row = (1, 0, 1, 2, 3, 3, 3, 3, 2, 1, 0, 0, 0, 1, 2, 2)
-sequence = (0, 1, 2, 3, 7, 11, 15, 14, 13, 12, 8, 4, 5, 6, 10, 9)
-
-
 open_list = []
 closed_list = set()
 
@@ -286,31 +280,12 @@ swap_position = [[1,4],
                  [10,15,13],
                  [11,14]]
 
-def HeuristicOne(read_config):
-    wrong_pieces = 0
-    for i in range(0,16):
-        if read_config[i] != 0:
-            if (read_config[i] != final_config[i]):
-                wrong_pieces += 1
-    return wrong_pieces
-
-def HeuristicTwo(read_config):
-    wrong_pieces = 0
-    for i in range (1,16):
-        if read_config[sequence[i - 1]] != 0:
-            if (read_config[sequence[i]] != (read_config[sequence[i - 1]] + 1)):
-                wrong_pieces += 1
-    return wrong_pieces
-
 def HeuristicTree(read_config):
     resp = 0
-    for i in range(0,16):
+    for i in range(16):
         if (read_config[i] != 0):
-            resp = resp + memo_heuristic[read_config[i]][i] 
+            resp += memo_heuristic[read_config[i]][i] 
     return resp
-
-def HeuristicFive(read_config):
-    return (max(HeuristicOne(read_config), HeuristicTwo(read_config), HeuristicTree(read_config)))
 
 def GetChildren(config, g_function):
     zero_position = config.index(0)
@@ -320,27 +295,22 @@ def GetChildren(config, g_function):
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
         aux_current = tuple(current_config[:])
         if (aux_current) not in closed_list:
-            heapq.heappush(open_list, (HeuristicTwo(aux_current) + inc_g, inc_g, aux_current))
+            heapq.heappush(open_list, (HeuristicTree(aux_current) + inc_g, inc_g, aux_current))
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
 
 def AStar(initial_config):
-    current_state = (HeuristicTwo(initial_config), 0, initial_config)
-    if(current_state[2] == final_config):
-        print(current_state[1])
-        return
-    if(current_state[2] not in closed_list):
-        closed_list.add(current_state[2])
-        GetChildren(current_state[2], current_state[1])
+    current_state = (HeuristicTree(initial_config), 0, initial_config)
+    closed_list.add(current_state[2])
+    GetChildren(current_state[2], current_state[1])
     current_state = heapq.heappop(open_list)
     while(open_list):
-        if(current_state[2] == final_config):
+        if(not current_state[0] - current_state[1]):
             print(current_state[1])
             return
         if(current_state[2] not in closed_list):
             closed_list.add(current_state[2])
             GetChildren(current_state[2], current_state[1])
         current_state = heapq.heappop(open_list)
-    print(current_state[1])
 
 read_config = tuple(map(int, input().split()))
 AStar(read_config)

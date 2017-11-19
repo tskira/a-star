@@ -325,17 +325,7 @@ def GetChildren(config, g_function):
 
 def AStar(initial_config):
     current_state = (HeuristicTwo(initial_config), 0, initial_config)
-    if(current_state[2] == final_config):
-        print(current_state[1])
-        return
-    if(current_state[2] not in closed_list):
-        closed_list.add(current_state[2])
-        GetChildren(current_state[2], current_state[1])
-    current_state = heapq.heappop(open_list)
-    while(open_list):
-        if(current_state[2] == final_config):
-            print(current_state[1])
-            return
+    while(current_state[0] - current_state[1]):
         if(current_state[2] not in closed_list):
             closed_list.add(current_state[2])
             GetChildren(current_state[2], current_state[1])
