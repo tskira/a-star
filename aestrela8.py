@@ -320,11 +320,11 @@ def GetChildren(config, g_function):
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
         aux_current = tuple(current_config[:])
         if (aux_current) not in closed_list:
-            heapq.heappush(open_list, (HeuristicTwo(aux_current) + inc_g, inc_g, aux_current))
+            heapq.heappush(open_list, (HeuristicOne(aux_current) + inc_g, inc_g, aux_current))
         current_config[zero_position], current_config[i] = current_config[i], current_config[zero_position]
 
 def AStar(initial_config):
-    current_state = (HeuristicTwo(initial_config), 0, initial_config)
+    current_state = (HeuristicOne(initial_config), 0, initial_config)
     if(current_state[2] == final_config):
         print(current_state[1])
         return
